@@ -34,6 +34,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                
                     <StackPanel Grid.Column="0" Grid.ColumnSpan="3" >
                         <StackPanel Orientation="Horizontal" Margin="5" >
                             <TextBlock Text="От:" Margin="0,0,10,0" VerticalAlignment="Center" FontSize="14"/>
@@ -45,14 +46,7 @@
                             <tk:DateTimePicker Value="{Binding FinishDate}" Width="200" Padding="1"
                                   FontSize="14" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Command="{Binding FormCommand}" Name="ExcellAll"
-                            Content="Сформировать" Margin="34,10,10,10" HorizontalAlignment="Center"
-                            Style="{StaticResource UpdateButton}" IsEnabled="{Binding IsEnableFormButton}"/>
-                            <Button DataContext="{Binding Source={StaticResource excelSave}}" IsEnabled="{Binding IsEnableButton}"  Command="{Binding SaveCommand}" 
-                                CommandParameter="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.ListLogData}" 
-                                Style="{StaticResource ExcelButton}"/>
-                        </StackPanel>
+                        
                         <GroupBox Header="Рабочий день" Margin="10,5" Padding="5">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
@@ -97,7 +91,8 @@
                                 <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
                                 <TextBox Text="{Binding SecondNameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,10,0"/>
                             </DockPanel>
-                            <ListBox ItemsSource="{Binding CollectionPerson}" SelectedItem="{Binding SelectedPersonFromList}" Margin="5,5,10,0" IsSynchronizedWithCurrentItem="False" 
+                            <ListBox ItemsSource="{Binding CollectionPerson}" SelectedItem="{Binding SelectedPersonFromList}" 
+                                     Margin="5,5,10,10" IsSynchronizedWithCurrentItem="False" 
                              VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True" Height="300">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -116,7 +111,17 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </DockPanel>
-                        <!--<ListBox ItemsSource="{Binding SelectedDivision.Persons}" SelectedIndex="0"
+
+                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3"  HorizontalAlignment="Center"  Margin="0,30">
+
+                        <Button Command="{Binding FormCommand}" Name="ExcellAll"
+                            Content="Сформировать" HorizontalAlignment="Center"
+                            Style="{StaticResource UpdateButton}" IsEnabled="{Binding IsEnableFormButton}"/>
+                        <Button DataContext="{Binding Source={StaticResource excelSave}}" IsEnabled="{Binding IsEnableButton}"  Command="{Binding SaveCommand}" 
+                                CommandParameter="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.ListLogData}" 
+                                Style="{StaticResource ExcelButton}"/>
+                    </StackPanel>
+                    <!--<ListBox ItemsSource="{Binding SelectedDivision.Persons}" SelectedIndex="0"
                      SelectedItem="{Binding SelectedPerson}" Margin="10,0" MaxHeight="300"
                       Visibility="{Binding IsVisiableTools, Converter={StaticResource VisConvUI}}">
                         <ListBox.ItemTemplate>

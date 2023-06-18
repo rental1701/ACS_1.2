@@ -152,15 +152,15 @@
     
     <Style x:Key="ExcelButton" TargetType="{x:Type Button}">
         <!--<Setter Property="Width" Value="100"/>-->
-        <Setter Property="Height" Value="30"/>
+        <Setter Property="Height" Value="35"/>
         <!--<Setter Property="Content" Value="Excel"/>-->
-        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Margin" Value="20,10,90,10"/>
         <Setter Property="ToolTip" Value="Выгрузить данные в Excel файл"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="White"/>
-       
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
         <Setter Property="Padding" Value="3"/>
         <Setter Property="Template" Value="{StaticResource ExcelButtonTemplate}"/>
         <Style.Triggers>
@@ -174,9 +174,9 @@
     </Style>
     
     <Style x:Key="UpdateButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="130"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="Margin" Value="5,1"/>
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Margin" Value="10,10"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
