@@ -1,0 +1,214 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:fa="http://schemas.fontawesome.com/icons/">
+
+    <ControlTemplate x:Key="UpdateButtonTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="border" CornerRadius="3"
+                                Background="{TemplateBinding Background}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                SnapsToDevicePixels="true">
+            <DockPanel               
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Margin="{TemplateBinding Padding}">
+                <fa:ImageAwesome x:Name="IconRefresh" 
+                                 Height="12"
+                                 Icon="Solid_SyncAlt"
+                                 Foreground="DarkBlue" 
+                                 Margin="0,0,10,0" />
+                <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False" 
+                                              RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+            </DockPanel>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" TargetName="border" Value="white"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="blue"/>
+                <Setter TargetName="IconRefresh" Property="Foreground" Value="blue"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background" TargetName="border" Value="WhiteSmoke"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="UpdatePersonButtonTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="border" CornerRadius="3"
+                                Background="{TemplateBinding Background}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                SnapsToDevicePixels="true">
+            <DockPanel               
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Margin="{TemplateBinding Padding}">
+                <fa:ImageAwesome x:Name="IconRefresh" 
+                                 Height="12"
+                                 Icon="Solid_SyncAlt"
+                                 Foreground="DarkBlue" 
+                                 Margin="0,0,10,0" />
+                <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False" 
+                                              RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+            </DockPanel>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background"  Value="white"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="blue"/>
+                <Setter TargetName="IconRefresh" Property="Foreground" Value="blue"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background" TargetName="border" Value="WhiteSmoke"/>
+            </Trigger>
+            <DataTrigger Binding="{Binding Path=DataContext.SelectedPerson, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="{x:Null}">
+                <Setter TargetName="border" Property="Background" Value="gray"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <ControlTemplate x:Key="ExcelButtonTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="border" CornerRadius="3"
+                                Background="{TemplateBinding Background}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                SnapsToDevicePixels="true">
+            <DockPanel               
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Margin="{TemplateBinding Padding}">
+                <fa:ImageAwesome x:Name="IconRefresh" 
+                                 Height="22"
+                                 Icon="Solid_FileExcel"
+                                 Foreground="Green"/>
+                <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False" 
+                                              RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+            </DockPanel>
+        </Border>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=DataContext.ListLogData,  RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="{x:Null}">
+                <Setter Property="Foreground" TargetName="IconRefresh"  Value="gray"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=DataContext.ListLogData.Count,  RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="0">
+                <Setter Property="Foreground" TargetName="IconRefresh"  Value="gray"/>
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" TargetName="border" Value="green"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="green"/>
+                <Setter Property="Foreground" TargetName="IconRefresh" Value="white"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background" TargetName="border" Value="Blue"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <ControlTemplate x:Key="ExcelPersonButtonTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="border" CornerRadius="3"
+                                Background="{TemplateBinding Background}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                SnapsToDevicePixels="true">
+            <DockPanel               
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Margin="{TemplateBinding Padding}">
+                <fa:ImageAwesome x:Name="IconRefresh" 
+                                 Height="22"
+                                 Icon="Solid_FileExcel"
+                                 Foreground="Green"/>
+                <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False" 
+                                              RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+            </DockPanel>
+        </Border>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=DataContext.ListDataPerson,  RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="{x:Null}">
+                <Setter Property="Foreground" TargetName="IconRefresh" Value="gray"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=DataContext.ListDataPerson.Count,  RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="0">
+                <Setter Property="Foreground" TargetName="IconRefresh"  Value="gray"/>
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" TargetName="border" Value="green"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="green"/>
+                <Setter Property="Foreground" TargetName="IconRefresh" Value="white"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background" TargetName="border" Value="Blue"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    
+    <Style x:Key="ExcelButton" TargetType="{x:Type Button}">
+        <!--<Setter Property="Width" Value="100"/>-->
+        <Setter Property="Height" Value="30"/>
+        <!--<Setter Property="Content" Value="Excel"/>-->
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="ToolTip" Value="Выгрузить данные в Excel файл"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="White"/>
+       
+        <Setter Property="Padding" Value="3"/>
+        <Setter Property="Template" Value="{StaticResource ExcelButtonTemplate}"/>
+        <Style.Triggers>
+            <Trigger Property="Name" Value="ExcelPerson">
+                <Setter Property="Template" Value="{StaticResource ExcelPersonButtonTemplate}"/>
+            </Trigger>
+            <Trigger Property="Name" Value="ExcelAll">
+                <Setter Property="Template" Value="{StaticResource ExcelButtonTemplate}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="UpdateButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="130"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="5,1"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="LightBlue"/>
+        <Setter Property="Padding" Value="1"/>
+        
+        <Setter Property="Template" Value="{StaticResource UpdateButtonTemplate}"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="Gray"/>
+                <Setter Property="ToolTip" Value="Подождите.Происходит формирование таблицы"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="UpdatePersonButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="130"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="5,1"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="LightBlue"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Template" Value="{StaticResource UpdatePersonButtonTemplate}"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="Gray"/>
+                <Setter Property="ToolTip" Value="Подождите.Происходит формирование таблицы"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
