@@ -59,7 +59,7 @@
                                     <tk:TimePicker Value="{Binding ExitTime, UpdateSourceTrigger=LostFocus}" Width="100" Margin="10,5" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </StackPanel>
-                                <Button Content="Применить" Command="{Binding ListListOfUndisciplinedCommand}" Width="150" Margin="10"/>
+                                <!--<Button Content="Применить" Command="{Binding ListListOfUndisciplinedCommand}" Width="150" Margin="10"/>-->
                             </StackPanel>
                         </GroupBox>
 

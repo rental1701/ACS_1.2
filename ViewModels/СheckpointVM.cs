@@ -206,14 +206,32 @@ namespace ACS.ViewModels
         public DateTime StartTime
         {
             get => _StartTime;
-            set => Set(ref _StartTime, value);
+            set
+            {
+                if (Set(ref _StartTime, value))
+                {
+                    if (ListLogData != null)
+                    {
+                        OnListListOfUndisciplinedCommandExecute(true);
+                    }
+                }
+            }
         }
         private DateTime _ExitTime = new DateTime(2023, 01, 01, 17, 0, 0);
         /// <summary>Время выхода/summary>
         public DateTime ExitTime
         {
             get => _ExitTime;
-            set => Set(ref _ExitTime, value);
+            set
+            {
+                if (Set(ref _ExitTime, value))
+                {
+                    if (ListLogData != null)
+                    {
+                        OnListListOfUndisciplinedCommandExecute(true);
+                    }
+                }
+            }
         }
 
         #endregion
@@ -302,6 +320,7 @@ namespace ACS.ViewModels
                 {
                     if (!IsUpdateSelectedPerson)
                     {
+                        ListDataPerson = null;
                         SelectedPerson = SelectedPersonFromList;
                         IsAllPerson = false;
                         // OnFormSelectedPersonCommandExecute(false);
@@ -333,6 +352,7 @@ namespace ACS.ViewModels
                         var person = Divisions?.SelectMany(d => d?.Persons)
                         .Where(p => p.ID == SelectedPersonIO?.HozOrgan).FirstOrDefault();
                         e = (Person)person.Clone();
+                        ListDataPerson = null;
 
                         SelectedPerson = e;
                         //OnFormSelectedPersonCommandExecute(false);
@@ -563,36 +583,51 @@ namespace ACS.ViewModels
 
                                 ListLogData = GetListLDIO(queryOne, queryTwo, isShort: true);
                             }
-                        }                      
+                        }
                         else if (SelectedGroup == GroupList[1])
                         {
 
                             if (IsAllPerson)
                             {
-                                queryOne = @$"With input as(
-                               Select p.HozOrgan, p.mode, p.TimeVal, 
-                               Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal asc) first 
-                               From pLogData p 
-                               Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 1) 
+                                queryOne = $@"Select p.HozOrgan Id, l.Name SurName, d.Name Division,  p.TimeVal input 
+                                              From pLogData p 
+                                              Join pList l on(l.ID = p.HozOrgan) 
+                                              Join PDivision d on(d.ID = l.Section)
+                                              Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}')
+                                              AND p.Event = 32 AND p.Mode = 1";
 
-                               SElect  i.HozOrgan Id,  l.Name SurName, d.Name Division,  i.TimeVal input From input i 
-                               Join pList l on(l.ID = i.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where i.first = 1 Order by i.TimeVal";
+
+                               // queryOne = @$"With input as(
+                               //Select p.HozOrgan, p.mode, p.TimeVal, 
+                               //Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal asc) first 
+                               //From pLogData p 
+                               //Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 1) 
+
+                               //SElect  i.HozOrgan Id,  l.Name SurName, d.Name Division,  i.TimeVal input From input i 
+                               //Join pList l on(l.ID = i.HozOrgan) 
+                               //Join PDivision d on(d.ID = l.Section) 
+                               //Where i.first = 1 Order by i.TimeVal";
                                 ListLogData = GetListLDIO(queryOne);
                             }
                             else if (SelectedPersonFromList != null)
                             {
-                                queryOne = @$"With input as(
-                               Select p.HozOrgan, p.mode, p.TimeVal, 
-                               Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal asc) first 
-                               From pLogData p 
-                               Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 1) 
+                                queryOne = $@"Select p.HozOrgan Id, l.Name SurName, d.Name Division,  p.TimeVal input 
+                                              From pLogData p 
+                                              Join pList l on(l.ID = p.HozOrgan) 
+                                              Join PDivision d on(d.ID = l.Section)
+                                              Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}')
+                                              AND p.Event = 32 AND p.Mode = 1  AND l.ID = {SelectedPersonFromList.ID}";
 
-                               SElect  i.HozOrgan Id,  l.Name SurName, d.Name Division,  i.TimeVal input From input i 
-                               Join pList l on(l.ID = i.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where l.ID = {SelectedPersonFromList.ID} AND i.first = 1 Order by i.TimeVal";
+                                // queryOne = @$"With input as(
+                                //Select p.HozOrgan, p.mode, p.TimeVal, 
+                                //Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal asc) first 
+                                //From pLogData p 
+                                //Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 1) 
+
+                                //SElect  i.HozOrgan Id,  l.Name SurName, d.Name Division,  i.TimeVal input From input i 
+                                //Join pList l on(l.ID = i.HozOrgan) 
+                                //Join PDivision d on(d.ID = l.Section) 
+                                //Where l.ID = {SelectedPersonFromList.ID} AND i.first = 1 Order by i.TimeVal";
                                 ListLogData = GetListLDIO(queryOne);
                             }
                         }
@@ -600,30 +635,42 @@ namespace ACS.ViewModels
                         {
                             if (IsAllPerson)
                             {
-                                queryOne = @$"With output as(
-                               Select p.HozOrgan, p.mode, p.TimeVal, 
-                               Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal desc) first 
-                               From pLogData p 
-                               Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 2) 
+                                queryOne = $@"Select p.HozOrgan Id, l.Name SurName, d.Name Division,  p.TimeVal output 
+                                              From pLogData p 
+                                              Join pList l on(l.ID = p.HozOrgan) 
+                                              Join PDivision d on(d.ID = l.Section)
+                                              Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}')
+                                              AND p.Event = 32 AND p.Mode = 2";
+                               // queryOne = @$"With output as(
+                               //Select p.HozOrgan, p.mode, p.TimeVal, 
+                               //Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal desc) first 
+                               //From pLogData p 
+                               //Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 2) 
 
-                               SElect  o.HozOrgan Id,  l.Name SurName, d.Name Division,  o.TimeVal output From output o 
-                               Join pList l on(l.ID = o.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where o.first = 1 Order by o.TimeVal";
+                               //SElect  o.HozOrgan Id,  l.Name SurName, d.Name Division,  o.TimeVal output From output o 
+                               //Join pList l on(l.ID = o.HozOrgan) 
+                               //Join PDivision d on(d.ID = l.Section) 
+                               //Where o.first = 1 Order by o.TimeVal";
                                 ListLogData = GetListLDIO(queryOne);
                             }
                             else if (SelectedPersonFromList != null)
                             {
-                                queryOne = @$"With output as(
-                               Select p.HozOrgan, p.mode, p.TimeVal, 
-                               Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal desc) first 
-                               From pLogData p 
-                               Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 2) 
+                                queryOne = $@"Select p.HozOrgan Id, l.Name SurName, d.Name Division,  p.TimeVal output 
+                                              From pLogData p 
+                                              Join pList l on(l.ID = p.HozOrgan) 
+                                              Join PDivision d on(d.ID = l.Section)
+                                              Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}')
+                                              AND p.Event = 32 AND p.Mode = 2  AND l.ID = {SelectedPersonFromList.ID}";
+                                // queryOne = @$"With output as(
+                                //Select p.HozOrgan, p.mode, p.TimeVal, 
+                                //Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal desc) first 
+                                //From pLogData p 
+                                //Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 2) 
 
-                               SElect  o.HozOrgan Id,  l.Name SurName, d.Name Division,  o.TimeVal output From output o 
-                               Join pList l on(l.ID = o.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where l.ID = {SelectedPersonFromList.ID} AND o.first = 1 Order by o.TimeVal";
+                                //SElect  o.HozOrgan Id,  l.Name SurName, d.Name Division,  o.TimeVal output From output o 
+                                //Join pList l on(l.ID = o.HozOrgan) 
+                                //Join PDivision d on(d.ID = l.Section) 
+                                //Where l.ID = {SelectedPersonFromList.ID} AND o.first = 1 Order by o.TimeVal";
                                 ListLogData = GetListLDIO(queryOne);
                             }
                         }
@@ -652,7 +699,7 @@ namespace ACS.ViewModels
                                Join PDivision d on(d.ID = l.Section) 
                                Where o.last = 1 Order by o.TimeVal";
 
-                               ListLogData = GetListLDIO(queryOne, queryTwo);
+                                ListLogData = GetListLDIO(queryOne, queryTwo);
                             }
                             else if (SelectedPersonFromList != null)
                             {
@@ -720,34 +767,49 @@ namespace ACS.ViewModels
 
                             if (IsAllPerson)
                             {
-                                queryOne = @$"With input as(
-                               Select p.HozOrgan, p.mode, p.TimeVal, 
-                               Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal asc) first 
-                               From pLogData p 
-                               Join pList l on(l.ID = p.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 1  AND d.ID = {SelectedDivision?.ID}) 
+                                queryOne = $@"Select p.HozOrgan Id, l.Name SurName, d.Name Division,  p.TimeVal input 
+                                              From pLogData p 
+                                              Join pList l on(l.ID = p.HozOrgan) 
+                                              Join PDivision d on(d.ID = l.Section)
+                                              Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}')
+                                              AND p.Event = 32 AND p.Mode = 1  AND d.ID = {SelectedDivision?.ID}";
+                                //Запрос для первого входа
+                                // queryOne = @$"With input as(
+                                //Select p.HozOrgan, p.mode, p.TimeVal, 
+                                //Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal asc) first 
+                                //From pLogData p 
+                                //Join pList l on(l.ID = p.HozOrgan) 
+                                //Join PDivision d on(d.ID = l.Section) 
+                                //Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 1  AND d.ID = {SelectedDivision?.ID}) 
 
-                               SElect  i.HozOrgan Id,  l.Name SurName, d.Name Division,  i.TimeVal input From input i 
-                               Join pList l on(l.ID = i.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where i.first = 1 Order by i.TimeVal";
+                                //SElect  i.HozOrgan Id,  l.Name SurName, d.Name Division,  i.TimeVal input From input i 
+                                //Join pList l on(l.ID = i.HozOrgan) 
+                                //Join PDivision d on(d.ID = l.Section) 
+                                //Where i.first = 1 Order by i.TimeVal";
                                 ListLogData = GetListLDIO(queryOne);
                             }
                             else if (SelectedPersonFromList != null)
                             {
-                                queryOne = @$"With input as(
-                               Select p.HozOrgan, p.mode, p.TimeVal, 
-                               Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal asc) first 
-                               From pLogData p 
-                               Join pList l on(l.ID = p.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 1  AND d.ID = {SelectedDivision?.ID}) 
+                                queryOne = $@"Select p.HozOrgan Id, l.Name SurName, d.Name Division,  p.TimeVal input 
+                                              From pLogData p 
+                                              Join pList l on(l.ID = p.HozOrgan) 
+                                              Join PDivision d on(d.ID = l.Section)
+                                              Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}')
+                                              AND p.Event = 32 AND p.Mode = 1  AND l.ID = {SelectedPersonFromList.ID}";
 
-                               SElect  i.HozOrgan Id,  l.Name SurName, d.Name Division,  i.TimeVal input From input i 
-                               Join pList l on(l.ID = i.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where l.ID = {SelectedPersonFromList.ID} AND i.first = 1 Order by i.TimeVal";
+                                //Запрос для первого входа
+                               // queryOne = @$"With input as(
+                               //Select p.HozOrgan, p.mode, p.TimeVal, 
+                               //Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal asc) first 
+                               //From pLogData p 
+                               //Join pList l on(l.ID = p.HozOrgan) 
+                               //Join PDivision d on(d.ID = l.Section) 
+                               //Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 1  AND l.ID = {SelectedPersonFromList.ID}) 
+
+                               //SElect  i.HozOrgan Id,  l.Name SurName, d.Name Division,  i.TimeVal input From input i 
+                               //Join pList l on(l.ID = i.HozOrgan) 
+                               //Join PDivision d on(d.ID = l.Section) 
+                               //Where l.ID = {SelectedPersonFromList.ID} AND i.first = 1 Order by i.TimeVal";
                                 ListLogData = GetListLDIO(queryOne);
                             }
                         }
@@ -756,34 +818,51 @@ namespace ACS.ViewModels
 
                             if (IsAllPerson)
                             {
-                                queryOne = @$"With output as(
-                               Select p.HozOrgan, p.mode, p.TimeVal, 
-                               Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal desc) first 
-                               From pLogData p 
-                               Join pList l on(l.ID = p.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 2  AND d.ID = {SelectedDivision?.ID}) 
+                                queryOne = $@"Select p.HozOrgan Id, l.Name SurName, d.Name Division,  p.TimeVal output 
+                                              From pLogData p 
+                                              Join pList l on(l.ID = p.HozOrgan) 
+                                              Join PDivision d on(d.ID = l.Section)
+                                              Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}')
+                                              AND p.Event = 32 AND p.Mode = 2  AND d.ID = {SelectedDivision?.ID}";
 
-                               SElect  o.HozOrgan Id,  l.Name SurName, d.Name Division,  o.TimeVal output From output o 
-                               Join pList l on(l.ID = o.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where o.first = 1 Order by o.TimeVal";
+
+                                //Запрос для последнего выхода
+                                // queryOne = @$"With output as(
+                                //Select p.HozOrgan, p.mode, p.TimeVal, 
+                                //Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal desc) first 
+                                //From pLogData p 
+                                //Join pList l on(l.ID = p.HozOrgan) 
+                                //Join PDivision d on(d.ID = l.Section) 
+                                //Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 2  AND d.ID = {SelectedDivision?.ID}) 
+
+                                //SElect  o.HozOrgan Id,  l.Name SurName, d.Name Division,  o.TimeVal output From output o 
+                                //Join pList l on(l.ID = o.HozOrgan) 
+                                //Join PDivision d on(d.ID = l.Section) 
+                                //Where o.first = 1 Order by o.TimeVal";
                                 ListLogData = GetListLDIO(queryOne);
                             }
                             else if (SelectedPersonFromList != null)
                             {
-                                queryOne = @$"With output as(
-                               Select p.HozOrgan, p.mode, p.TimeVal, 
-                               Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal desc) first 
-                               From pLogData p 
-                               Join pList l on(l.ID = p.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 2  AND d.ID = {SelectedDivision?.ID}) 
+                                queryOne = $@"Select p.HozOrgan Id, l.Name SurName, d.Name Division,  p.TimeVal output 
+                                              From pLogData p 
+                                              Join pList l on(l.ID = p.HozOrgan) 
+                                              Join PDivision d on(d.ID = l.Section)
+                                              Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}')
+                                              AND p.Event = 32 AND p.Mode = 2  AND l.ID = {SelectedPersonFromList.ID}";
 
-                               SElect  o.HozOrgan Id,  l.Name SurName, d.Name Division,  o.TimeVal output From output o 
-                               Join pList l on(l.ID = o.HozOrgan) 
-                               Join PDivision d on(d.ID = l.Section) 
-                               Where l.ID = {SelectedPersonFromList.ID} AND o.first = 1 Order by o.TimeVal";
+                                //Запрос для последнего выхода
+                                // queryOne = @$"With output as(
+                                //Select p.HozOrgan, p.mode, p.TimeVal, 
+                                //Row_number() Over(Partition by Convert(date, p.TimeVal), p.HozOrgan Order by p.TimeVal desc) first 
+                                //From pLogData p 
+                                //Join pList l on(l.ID = p.HozOrgan) 
+                                //Join PDivision d on(d.ID = l.Section) 
+                                //Where (p.TimeVal >= '{StartDate}' AND p.TimeVal <= '{FinishDate}') AND p.Event = 32 AND p.Mode = 2  AND l.ID = {SelectedPersonFromList.ID}) 
+
+                                //SElect  o.HozOrgan Id,  l.Name SurName, d.Name Division,  o.TimeVal output From output o 
+                                //Join pList l on(l.ID = o.HozOrgan) 
+                                //Join PDivision d on(d.ID = l.Section) 
+                                //Where l.ID = {SelectedPersonFromList.ID} AND o.first = 1 Order by o.TimeVal";
                                 ListLogData = GetListLDIO(queryOne);
                             }
                         }
