@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\Image\No_Foto.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +30,9 @@
 
 	
   <ItemGroup>
+    <Content Include="Resources\Image\No_Foto.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Image\No_Foto.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

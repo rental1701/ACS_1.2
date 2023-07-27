@@ -350,7 +350,8 @@ namespace ACS.ViewModels
                         Person e = new();
 
                         var person = Divisions?.SelectMany(d => d?.Persons)
-                        .Where(p => p.ID == SelectedPersonIO?.HozOrgan).FirstOrDefault();
+                                               .FirstOrDefault(p => p.ID == SelectedPersonIO?.HozOrgan);
+                       
                         e = (Person)person.Clone();
                         ListDataPerson = null;
 

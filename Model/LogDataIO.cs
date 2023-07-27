@@ -19,7 +19,7 @@ namespace ACS.Model
         {
             get { return _LastOutput; }
             set
-            {
+            { 
                 _LastOutput = value;
             }
         }
