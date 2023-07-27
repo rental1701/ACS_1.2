@@ -1,11 +1,7 @@
 ﻿using ACS.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static ACS.Infrastructure.ParseSQLData;
 
 namespace ACS.Model
@@ -85,7 +81,7 @@ namespace ACS.Model
                                     DateTime? date =  ConvertToDateTime(data.Rows[row].ItemArray[0]);
                                     if (date is DateTime t)
                                     {
-                                        int c = Convert.ToInt32(t.Day - log.EntryTime?.Day);
+                                        int c = Convert.ToInt32(t.DayOfYear - log.EntryTime?.DayOfYear);
                                         if (1 == c)
                                         {
                                             log.ExitTime = t;

@@ -310,7 +310,7 @@
                                 <Label Content="До:" VerticalAlignment="Center"/>
                                 <tk:DateTimePicker Value="{Binding FinishDatePerson}"  FontSize="14" Height="30"
                                                    FontWeight="DemiBold" VerticalAlignment="Center"/>
-                                <Button x:Name="UpdatePerson" Content="Обновить" Command="{Binding FormSelectedPersonCommand}" IsEnabled="{Binding IsEnableFormButtonPerson}"
+                                <Button x:Name="UpdatePerson" Content="Сформировать" Command="{Binding FormSelectedPersonCommand}" IsEnabled="{Binding IsEnableFormButtonPerson}"
                                         Style="{StaticResource UpdatePersonButton}" Margin="10,2">
 
                                 </Button>
@@ -397,7 +397,7 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Рабочее время">
+                                    <DataGridTemplateColumn Header="Разница">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding WorkTime}" HorizontalAlignment="Center"/>
@@ -407,7 +407,8 @@
 
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding ListDataPerson.Count,StringFormat=Дней: {0}}"/>
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="14"
+                                       Text="{Binding ListDataPerson.Count,StringFormat=Дней: {0}}"/>
                             <!--<StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,5">
                                     <TextBlock Text="Дней: "  Grid.Row="1"/>
                                 <TextBlock Text="{Binding ListDataPerson.Count}"/>

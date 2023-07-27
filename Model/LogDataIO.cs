@@ -19,7 +19,7 @@ namespace ACS.Model
         {
             get { return _LastOutput; }
             set
-            { 
+            {
                 _LastOutput = value;
             }
         }
@@ -129,7 +129,7 @@ namespace ACS.Model
                                         data.Rows[row].Delete();
                                         data.AcceptChanges();
                                         break;
-                                    }  
+                                    }
                                 }
                                 row++;
                             }
@@ -158,7 +158,7 @@ namespace ACS.Model
                                 LogDataIO temp = new(data, i, timeExit) { IsEarlyExit = d?.TimeOfDay < timeExit };
                                 logDatas.Add(temp);
                             }
-                        } 
+                        }
                     }
                     //LogDataCompare comp = new();
                     //logDatas.Sort(comp);
